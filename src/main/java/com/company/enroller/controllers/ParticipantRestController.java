@@ -37,7 +37,7 @@ public class ParticipantRestController {
 		Participant participantToCheck = participantService.findByLogin(participant.getLogin());
 		if (participantToCheck == null) {
 			participantService.addParticipant(participant);
-			return new ResponseEntity<Participant>(participant, HttpStatus.OK);
+			return new ResponseEntity("Participant added", HttpStatus.OK);
 		}
 		return new ResponseEntity("Unable to create. A participant with login " + participant.getLogin() + " already exist.", HttpStatus.CONFLICT);
 	}
@@ -50,6 +50,16 @@ public class ParticipantRestController {
 		}
 		participantService.removeParticipant(participantToCheck);
 		return new ResponseEntity("Participant removed", HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateParticipant(@PathVariable("id")  String login, @RequestBody Participant updatedParticipant) {
+		Participant participantToCheck = participantService.findByLogin(login);
+		if (participantToCheck == null) {
+			return new ResponseEntity("Unable to update. A participant with login " + login + " does not exist.", HttpStatus.NOT_FOUND);
+		}
+		participantService.updateParticipant(participantToCheck, updatedParticipant);
+		return new ResponseEntity("Participant updated", HttpStatus.OK);
 	}
 
 }

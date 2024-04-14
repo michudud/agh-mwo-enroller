@@ -42,4 +42,14 @@ public class ParticipantRestController {
 		return new ResponseEntity("Unable to create. A participant with login " + participant.getLogin() + " already exist.", HttpStatus.CONFLICT);
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removeParticipant(@PathVariable("id")  String login) {
+		Participant participantToCheck = participantService.findByLogin(login);
+		if (participantToCheck == null) {
+			return new ResponseEntity("Unable to remove. A participant with login " + login + " does not exist.", HttpStatus.NOT_FOUND);
+		}
+		participantService.removeParticipant(participantToCheck);
+		return new ResponseEntity("Participant removed", HttpStatus.OK);
+	}
+
 }
